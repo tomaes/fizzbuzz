@@ -17,7 +17,7 @@
 #include <stdlib.h>
 
 
-#define V3
+#define OBF1
 
 
 
@@ -25,28 +25,33 @@
 int main(int argc, char ** argv)
 {
 
- int i, range = 1000;
+ int i, range = 100;
 
 
 
-/* a no-nonsense, standard solution, most programmers would think of first. */
+/* a no-nonsense, to-the-letter, standard solution, most programmers would think of first. */
 #ifdef V1
  for( i = 0; i <= range; i++ )
  {      
        if (i%5 == 0 && i%3 == 0) 
-          puts("fizzbuzz"); 
+          printf("fizzbuzz\n"); 
        else
        if (i%3 == 0) 
-          puts("fizz"); 
+          printf("fizz\n"); 
        else
-       if (i%5 == 0) puts("buzz"); 
+       if (i%5 == 0) printf("buzz\n"); 
+       else
+           printf("%d\n",i);
  }
 #endif
 
 
   
-/* somewhat optimized, still a very reasonable and readable version */
+/* somewhat different and slightly optimized version. still a very reasonable and readable version */
 #ifdef V2
+
+ char n[4] = {0};
+ 
  for( i = 0; i++ < range; )
  {      
        if (i%15 == 0) 
@@ -56,6 +61,8 @@ int main(int argc, char ** argv)
           puts("fizz"); 
        else
        if (i%5 == 0) puts("buzz"); 
+       else
+           puts( itoa(i,n,10) );
  }
 #endif
 
@@ -72,6 +79,8 @@ int main(int argc, char ** argv)
           puts("fizz"); 
        else
        if (!(i%5)) puts("buzz"); 
+       else
+           printf("%d\n", i);
  }  
 #endif
 
@@ -82,19 +91,26 @@ int main(int argc, char ** argv)
  char *fb[] = { "fizz", "buzz", "fizzbuzz" };  
 
  for( i = 0; i++ < range; )
-     !(i%15) ? puts(fb[2]) : !(i%5) ? puts(fb[1]) : !(i%3) ? puts(fb[0]) : 0; 
+     !(i%15) ? puts(fb[2]) : !(i%5) ? puts(fb[1]) : !(i%3) ? puts(fb[0]) : printf("%d\n",i); 
 #endif
 
 
 
 /* let's put everything in one printf(), quite raunchy version. */
 #ifdef V5
- for(i = 0; i++ < range;) printf("\n%s%s%s", !(i%3)?"fizz ":"", !(i%5)?"buzz ":"", !(i%15)?"fizzbuzz":"" );
+ char n[4] = {0};
+ 
+ for(i = 0; i++ < range;)
+   printf( "\n%s%s%s%s", 
+         ( (i%3)&&(i%5)&&(i%15)    )       ? itoa(i,n,10) : "",  
+         ( (!(i%3))&&(i%5)&&(i%15) )       ? "fizz"       : "", 
+         ( (!(i%5))&&(i%3)&&(i%15) )       ? "buzz"       : "", 
+         ( (!(i%15))&&(!(i%5))&&(!(i%3)) ) ? "fizzbuzz"   : "" );
 #endif
  
  
  
-/* And another fairly liberal interpretation of the test that is not using modulo any more. */ 
+/* a fairly liberal interpretation of the test (omitting a tiny part) that is not using modulo any more. */ 
 #ifdef V6
  for( i = 0; i++ < range; )
  {
@@ -108,7 +124,7 @@ int main(int argc, char ** argv)
   
 /* Now let's up the ante a bit and show a glimpse of what's possible, but certainly
    not desirable. :) You could still figure it out, but you'd need some time, I guess.
-   All the terrible things happen in the array init parts, the main loop is still 
+   all the terrible things happen in the array init part, the main loop is still 
    unobfuscated yet. */  
 #ifdef OBF1
  int k = 0142; 
@@ -128,7 +144,7 @@ int main(int argc, char ** argv)
  b[3] = f[1^!-1+2]; 
  b[~!+04?04:04] = s[~0&0x10-~~0xb];
    
- while(i--) (!(i%15))?printf("%s%s\n",f,b):(!(i%5))?puts(b):(!(i%3))?puts(f):"";
+ while(i--) (!(i%15))?printf("%s%s\n",f,b):(!(i%5))?puts(b):(!(i%3))?puts(f):printf("%d\n",i);
 #endif  
     
 

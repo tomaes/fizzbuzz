@@ -5,9 +5,9 @@
  * 
  *  from the very reasonable to the very insane, implemented in plain C89.
  *
- *  V1-V7, OBF1 by Thomas Gruetzmacher (tomaes@32x.de)
+ *  V1-V8, OBF1 by Thomas Gruetzmacher (tomaes@32x.de)
  *  
- *  OBF2 by Rrrola
+ *  OBF2 contributed by Rrrola
  *
  *  Licence: This source code is in the public domain.
  *
@@ -16,9 +16,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 
-#define OBF2
+#define V8
 
 
 
@@ -132,6 +133,23 @@ int main(int argc, char ** argv)
     printf( "i:%3.d %s-> %s\t",   i, fb[~-3], fb[  (i/15. - (F)(i/15)) ? 0x7&4 : -1&3 ] );
     printf( "i:%3.d %s-> %s\t\t", i, fb[ !0], fb[  (i/5.  - (F)(i/05)) ? 0x7&4 : -1&3 ] );
     printf( "i:%3.d %s-> %s\t\n", i, fb[ !1], fb[  (i/3.  - (F)(i/03)) ? 0x7&4 : -1&3 ] );
+ }
+#endif
+
+
+
+/* in this version, the modulo is obfuscated twice. Once by using trigonomy and once again by 
+   the mod emulation already used in V6 and V7 */
+#ifdef V8
+#define T .999
+#define F float
+ char n[8] = {0}; 
+ char *s[] = { "fizz","buzz","fizzbuzz" };
+
+ for( i = 0; i++ < range; )
+ {               
+   itoa(i,n,10);
+   printf("%s:",cos((i/15.-(F)(i/15)))>T?s[2]:cos((i/5.-(F)(i/5)))>T?s[1]:cos((i/3.-(F)(i/3)))>T?*s:n);
  }
 #endif
 

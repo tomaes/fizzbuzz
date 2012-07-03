@@ -4,9 +4,9 @@
  *  A collection of solutions to the so-called "fizz buzz" test, as proposed by I. Ghory
  * 
  *  from the very reasonable to the very insane, implemented in plain C89.
- *  (TODO: not insane enough. need more versions)
  *
- *  by Thomas Gruetzmacher (tomaes@32x.de)
+ *  V1-V7, OBF1 by Thomas Gruetzmacher (tomaes@32x.de)
+ *  OBF2 by Rrrola
  *
  *  Licence: This source code is in the public domain.
  *
@@ -17,8 +17,7 @@
 #include <stdlib.h>
 
 
-#define OBF1
-
+#define OBF2
 
 
 
@@ -121,6 +120,21 @@ int main(int argc, char ** argv)
 #endif
 
 
+
+/* same, same, but different; combination of V4 and V6, with some minor obfuscation.  */
+#ifdef V7    
+#define F float
+ char *fb[] = { "fizz", "buzz", "fizzbuzz", "!", "~" };   
+
+ for( i = 0; i++ < range; ) 
+ {
+    printf( "i:%3.d %s-> %s\t",   i, fb[~-3], fb[  (i/15. - (F)(i/15)) ? 0x7&4 : -1&3 ] );
+    printf( "i:%3.d %s-> %s\t\t", i, fb[ !0], fb[  (i/5.  - (F)(i/05)) ? 0x7&4 : -1&3 ] );
+    printf( "i:%3.d %s-> %s\t\n", i, fb[ !1], fb[  (i/3.  - (F)(i/03)) ? 0x7&4 : -1&3 ] );
+ }
+#endif
+
+  
   
 /* Now let's up the ante a bit and show a glimpse of what's possible, but certainly
    not desirable. :) You could still figure it out, but you'd need some time, I guess.
@@ -132,27 +146,35 @@ int main(int argc, char ** argv)
         
  char s[] = {k, k+4, k+7, k+19, k+24, !!(k-~~k)}, f[*s-0x5d], b[(!i|!i-~!-03)*5]; 
     
- f[!s] = s[!!k]; 
- f[1?1&!!i+!i:!i] = s[1<<1]; 
- f[(!!k^!k)<<!!k] = *(s+(0x400>>010)); 
- f[3] = s[(-1^!-1)&(!!~1<<2)]; 
- f[1^!-1+01^~-1+1<<2-!'?'] = *(s+!!~0+2*2);
+ f[!s] = s[!!k]; f[1?1&!!i+!i:!i] = s[1<<1]; f[(!!k^!k)<<!!k] = *(s+(0x400>>010)); 
+ f[3] = s[(-1^!-1)&(!!~1<<2)]; f[1^!-1+01^~-1+1<<2-!'?'] = *(s+!!~0+2*2);
     
- b[!s] = s[!f]; 
- b[0?0:!!'Z'] = s[-1&0x3]; 
- b[~0*-1<<1] = *(f+!0*2); 
- b[3] = f[1^!-1+2]; 
- b[~!+04?04:04] = s[~0&0x10-~~0xb];
+ b[!s] = s[!f]; b[0?0:!!'Z'] = s[-1&0x3]; b[~0*-1<<1] = *(f+!0*2); 
+ b[3] = f[1^!-1+2]; b[~!+04?04:04] = s[~0&0x10-~~0xb];
    
  while(i--) (!(i%15))?printf("%s%s\n",f,b):(!(i%5))?puts(b):(!(i%3))?puts(f):printf("%d\n",i);
 #endif  
     
-
     
-#ifdef OBF2    
-/* TODO: the borderline insane version goes here. :) */
-#endif
+    
+/* Yep, this is actually a 74 byte assembly programm in a char array dumped as a .com file, then executed.
+   Obviously, this only works on suitable operating systems (up to XP on Windows, otherwise you need DOSBox).
+   All credit for the contents of c[] belongs to Rrrola. :) */
+#ifdef OBF2  
+ char c[] = 
+ { 
+   0x40, 0x43, 0xD1, 0xCB, 0x72, 0xFC, 0x60, 0x93, 0xBA, 0x36, 0x01, 0xA9, 0x48, 0x12, 0x75, 0x1B,
+   0xB2, 0x40, 0xA9, 0x20, 0x04, 0x75, 0x14, 0xB2, 0x3C, 0x48, 0x74, 0x0F, 0x93, 0xF6, 0x74, 0x48,
+   0x05, 0x30, 0x30, 0x89, 0x44, 0x46, 0x3C, 0x31, 0x80, 0xD2, 0x0A, 0xB4, 0x09, 0xCD, 0x21, 0x61,
+   0x40, 0x3C, 0x64, 0x76, 0xCD, 0xC3, 0x46, 0x69, 0x7A, 0x7A, 0x0A, 0x24, 0x46, 0x69, 0x7A, 0x7A,
+   0x42, 0x75, 0x7A, 0x7A, 0x0A, 0x24, 0x00, 0x00, 0x0A, 0x24 
+ };
 
+  FILE * file = fopen ("fizzbuzz.com","wb");  
+  if (file != NULL) { fwrite (c, 1, sizeof(c), file ); fclose (file); }  
+  system("fizzbuzz.com");  
+#endif
+   
   
   system("PAUSE");	
   return 0;

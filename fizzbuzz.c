@@ -6,6 +6,7 @@
  *  from the very reasonable to the very insane, implemented in plain C89.
  *
  *  V1-V7, OBF1 by Thomas Gruetzmacher (tomaes@32x.de)
+ *  
  *  OBF2 by Rrrola
  *
  *  Licence: This source code is in the public domain.
@@ -157,9 +158,9 @@ int main(int argc, char ** argv)
     
     
     
-/* Yep, this is actually a 74 byte assembly programm in a char array dumped as a .com file, then executed.
-   Obviously, this only works on suitable operating systems (up to XP on Windows, otherwise you need DOSBox).
-   All credit for the contents of c[] belongs to Rrrola. :) */
+/* Yep, this is actually a 74 byte assembly program in a char array dumped as a .com file, then executed.
+   Obviously, this only works on suitable operating systems (up to XP on Windows, otherwise you'd need DOSBox).
+   All credit for the contents of c[] belongs to Rrrola. */
 #ifdef OBF2  
  char c[] = 
  { 

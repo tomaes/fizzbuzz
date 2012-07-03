@@ -5,7 +5,7 @@
  * 
  *  from the very reasonable to the very insane, implemented in plain C89.
  *
- *  V1-V8, OBF1 by Thomas Gruetzmacher (tomaes@32x.de)
+ *  V1-V8, OBF1 by Thomas Gruetzmacher (tomaes.32x.de)
  *  
  *  OBF2 contributed by Rrrola
  *
@@ -19,7 +19,7 @@
 #include <math.h>
 
 
-#define V8
+#define V5
 
 
 
